@@ -2,7 +2,7 @@
 @using System.ComponentModel.DataAnnotations
 
 <h3>Students</h3>
-<button class="btn btn-primary mb-2" @onclick="ShowAddForm">Add Student</button>>
+<button class="btn btn-primary mb-2" @onclick="ShowAddForm">Add Student</button>
 
 @if (showAddForm)
 {
@@ -17,9 +17,44 @@
 			<label for="email" class="form-label">Email</label>
 			<InputText id="email" class="form-control" @bind-Value="newStudent.Email" />
 		</div>
+		<div class="mb-3">
+			<label for="major" class="form-label">Major</label>
+			<InputText id="major" class="form-control" @bind-Value="newStudent.Major"/>
+		</div>
 		<button type="submit" class="btn btn-success">Add Student</button>
 	</EditForm>
+
 }
+<div class="table-responsive">
+	<table class="table table-borderless">
+		<thead>
+			<tr>
+				<th>ID</th>
+				<th>Name</th>
+				<th>Email</th>
+				<th>Major</th>
+				<th>Created At</th>
+				<th>Actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var student in students)
+			{
+				<tr>
+					<td>@student.Id</td>
+					<td>@student.Name</td>
+					<td>@student.Email</td>
+					<td>@student.Major</td>
+					<td>@student.CreatedAt.ToShortDateString()</td>
+					<td>
+						<button class="btn btn-danger btn-sm" @onclick="() => students.Remove(student)">Delete</button>
+					</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+</div>
+
 
 @code {
 	private List<Student> students = new List<Student>();
@@ -40,7 +75,16 @@
 		public DateTime CreatedAt { get; set; } = DateTime.Now;
 	}
 
-
+	protected override void OnInitialized()
+	{
+		base.OnInitialized();
+		students = new List<Student>
+		{
+				new Student { Id = 1, Name = "Nazar Zhyliuk	", Email = "125226@student.san.edu.pl", Major = "Informatics", CreatedAt = DateTime.Now },
+				new Student { Id = 1, Name = "Bartosz Czerniawski", Email = new Random().Next(100000, 200000) + "@student.san.edu.pl", Major = "Informatics", CreatedAt = DateTime.Now },
+				new Student { Id = 1, Name = "Edmund Fiałkowski", Email = new Random().Next(100000, 200000) + "@student.san.edu.pl", Major = "Informatics", CreatedAt = DateTime.Now }
+		};
+	}
 	private void ShowAddForm()
 	{
 		showAddForm = !showAddForm;
