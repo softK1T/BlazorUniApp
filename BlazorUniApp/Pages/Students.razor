@@ -1,0 +1,56 @@
+﻿@page "/students"
+@using System.ComponentModel.DataAnnotations
+
+<h3>Students</h3>
+<button class="btn btn-primary mb-2" @onclick="ShowAddForm">Add Student</button>>
+
+@if (showAddForm)
+{
+	<EditForm Model="newStudent" OnValidSubmit="AddStudent">
+		<DataAnnotationsValidator />
+		<ValidationSummary />
+		<div class="mb-3">
+			<label for="name" class="form-label">Name</label>
+			<InputText id="name" class="form-control" @bind-Value="newStudent.Name" />
+		</div>
+		<div class="mb-3">
+			<label for="email" class="form-label">Email</label>
+			<InputText id="email" class="form-control" @bind-Value="newStudent.Email" />
+		</div>
+		<button type="submit" class="btn btn-success">Add Student</button>
+	</EditForm>
+}
+
+@code {
+	private List<Student> students = new List<Student>();
+	private Student newStudent = new Student();
+	private bool showAddForm = false;
+
+	public class Student {
+		public int Id { get; set; }
+
+		[Required]
+		public string Name { get; set; } = string.Empty;
+
+		[Required]
+		public string Email { get; set; } = string.Empty;
+
+		[Required]
+		public string Major { get; set; } = string.Empty;
+		public DateTime CreatedAt { get; set; } = DateTime.Now;
+	}
+
+
+	private void ShowAddForm()
+	{
+		showAddForm = !showAddForm;
+	}
+
+	private void AddStudent()
+	{
+		newStudent.Id = students.Count + 1; 
+		students.Add(newStudent);
+		showAddForm = false;
+		newStudent = new Student(); 
+	}
+}
